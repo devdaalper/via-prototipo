@@ -2122,6 +2122,8 @@ details[open] .faq-chevron{transform:rotate(180deg)}
     var dd = document.querySelector('.dropdown'); if (dd) dd.classList.remove('open');
     if (history && history.replaceState) history.replaceState(null, '', '#' + stem);
     if (window.viaFeedbackRetag) window.viaFeedbackRetag();
+    var _dot = document.querySelector('#site-nav .logo .dot');
+    if (_dot) { _dot.style.animation = 'none'; void _dot.offsetWidth; _dot.style.animation = ''; }
   }
   window.viaRoute = route;
   document.addEventListener('click', function (e) {
