@@ -2261,10 +2261,10 @@ details[open] .faq-chevron{transform:rotate(180deg)}
     panel.innerHTML = '<div class="hd"><span>Mis comentarios (' + L.length + ')</span>'
       + '<span class="lk" data-close style="cursor:pointer">cerrar</span></div>'
       + '<div class="fb-list">' + items + '</div>'
-      + '<div class="fb-foot"><button class="fb-a pri" data-act="copy">Copiar todo</button>'
-      + '<button class="fb-a sec" data-act="txt">Descargar .txt</button>'
+      + '<div class="fb-foot"><button class="fb-a pri" data-act="send">Enviar a v.ia</button>'
+      + '<button class="fb-a sec" data-act="copy">Copiar</button>'
+      + '<button class="fb-a sec" data-act="txt">.txt</button>'
       + '<button class="fb-a sec" data-act="wa">WhatsApp</button>'
-      + '<button class="fb-a sec" data-act="mail">Email</button>'
       + '<button class="fb-a del" data-act="clear">Borrar todo</button></div>';
   }
 
@@ -2275,6 +2275,18 @@ details[open] .faq-chevron{transform:rotate(180deg)}
     if (t.hasAttribute('data-edit-lk')) { var _c = comments[t.getAttribute('data-edit-lk')]; if (_c) openPop(_c.code, _c.name, _c.page); return; }
     if (t.hasAttribute('data-go')) { goTo(t.getAttribute('data-go'), t.getAttribute('data-sec')); return; }
     var act = t.getAttribute('data-act'); if (!act) return;
+    if (act === 'send') {
+      if (!listComments().length) { alert('Aún no hay comentarios para enviar.'); return; }
+      var sbtn = t; sbtn.disabled = true; sbtn.textContent = 'Enviando…';
+      fetch('https://formsubmit.co/ajax/dev.daalper@gmail.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ _subject: 'Feedback v.ia — comentarios de la clienta', _template: 'table', message: asText() })
+      }).then(function (r) { return r.json(); })
+        .then(function () { sbtn.textContent = '¡Enviado! ✓ Gracias'; })
+        .catch(function () { sbtn.disabled = false; sbtn.textContent = 'Reintentar envío'; });
+      return;
+    }
     if (act === 'copy') {
       if (navigator.clipboard) navigator.clipboard.writeText(asText());
       var o = t.textContent; t.textContent = 'Copiado ✓'; setTimeout(function () { t.textContent = o; }, 1500);
