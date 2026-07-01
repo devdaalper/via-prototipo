@@ -2278,7 +2278,7 @@ details[open] .faq-chevron{transform:rotate(180deg)}
     if (act === 'send') {
       if (!listComments().length) { alert('Aún no hay comentarios para enviar.'); return; }
       var sbtn = t; sbtn.disabled = true; sbtn.textContent = 'Enviando…';
-      fetch('https://formsubmit.co/ajax/dev.daalper@gmail.com', {
+      fetch('https://formsubmit.co/ajax/bccbf98d51c6cca29509f3c0e2f4bded', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ _subject: 'Feedback v.ia — comentarios de la clienta', _template: 'table', message: asText() })
