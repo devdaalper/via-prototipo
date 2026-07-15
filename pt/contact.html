@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v.ia — Contacto | Prueba v.ia para tu caso de uso</title>
+<meta name="description" content="Solicita una demostración de v.ia. Te enseñamos la plataforma funcionando con una de tus vacantes reales, de la publicación al contrato firmado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { navy:'#142543', ink:'#252c2d', idea:'#A6E115', igloo:'#8dc1de', bic:'#1843d4', ivory:'#ebece0' },
+  fontFamily: { display:['Montserrat','sans-serif'], body:['Inter','sans-serif'], mono:['"Space Mono"','monospace'] },
+  maxWidth: { content:'1200px' }
+}}}
+</script>
+<link rel="stylesheet" href="../assets/via.css">
+</head>
+<body class="bg-navy text-ivory font-body antialiased" data-page="contact" data-lang="pt">
+
+<div id="site-nav"></div>
+
+<main class="pt-16">
+
+<section class="max-w-content mx-auto px-6 pt-20 pb-10 text-center reveal">
+  <p class="eyebrow text-idea">Empieza</p>
+  <h1 class="font-display font-extrabold text-ivory text-4xl md:text-6xl leading-[1.03] tracking-tight mt-3">Solicite uma demonstração</h1>
+  <p class="text-ivory font-medium text-lg md:text-xl leading-snug mt-6 max-w-2xl mx-auto">Mostramos a plataforma funcionando, com o seu processo.</p>
+  <p class="text-ivory/60 leading-relaxed mt-3 max-w-2xl mx-auto">Sin presentaci&oacute;n de 40 l&aacute;minas. Vemos c&oacute;mo se ver&iacute;a una de tus vacantes reales dentro de v.ia: desde que se publica hasta que el contrato queda firmado.</p>
+</section>
+
+<section class="bg-ivory text-navy">
+  <div class="max-w-content mx-auto px-6 py-20 grid lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-14 items-start">
+
+    <div class="reveal">
+      <form id="contact-form"
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            novalidate
+            class="bg-white rounded-2xl border border-navy/10 p-7 md:p-9">
+        <input type="hidden" name="access_key" value="TU_ACCESS_KEY_WEB3FORMS">
+        <input type="hidden" name="subject" value="Nuevo lead de demo — v.ia">
+        <input type="hidden" name="from_name" value="Sitio v.ia">
+        <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" autocomplete="off">
+
+        <div class="space-y-5">
+          <div>
+            <label for="name" class="block text-sm font-medium text-navy/70 mb-1.5">Nombre completo</label>
+            <input id="name" name="name" type="text" required autocomplete="name"
+                   placeholder="Nombre y apellido"
+                   class="w-full rounded-sm border border-navy/15 bg-white px-4 py-3 text-navy placeholder-navy/35 focus:outline-none focus:ring-2 focus:ring-idea focus:border-idea transition">
+            <p class="err text-bic text-xs mt-1.5 hidden">Indícanos tu nombre.</p>
+          </div>
+
+          <div>
+            <label for="company" class="block text-sm font-medium text-navy/70 mb-1.5">Empresa</label>
+            <input id="company" name="company" type="text" required autocomplete="organization"
+                   placeholder="Tu empresa"
+                   class="w-full rounded-sm border border-navy/15 bg-white px-4 py-3 text-navy placeholder-navy/35 focus:outline-none focus:ring-2 focus:ring-idea focus:border-idea transition">
+            <p class="err text-bic text-xs mt-1.5 hidden">Indícanos tu empresa.</p>
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-navy/70 mb-1.5">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email"
+                   placeholder="tu@empresa.com"
+                   class="w-full rounded-sm border border-navy/15 bg-white px-4 py-3 text-navy placeholder-navy/35 focus:outline-none focus:ring-2 focus:ring-idea focus:border-idea transition">
+            <p class="err text-bic text-xs mt-1.5 hidden">Introduce un email válido.</p>
+          </div>
+
+          <div>
+            <label for="phone" class="block text-sm font-medium text-navy/70 mb-1.5">Teléfono</label>
+            <input id="phone" name="phone" type="tel" required autocomplete="tel"
+                   placeholder="+34 673 289 103"
+                   class="w-full rounded-sm border border-navy/15 bg-white px-4 py-3 text-navy placeholder-navy/35 focus:outline-none focus:ring-2 focus:ring-idea focus:border-idea transition">
+            <p class="err text-bic text-xs mt-1.5 hidden">Indícanos un teléfono de contacto.</p>
+          </div>
+
+          <div>
+            <label for="challenge" class="block text-sm font-medium text-navy/70 mb-1.5">¿Cuál es tu mayor reto en RR.HH.?</label>
+            <select id="challenge" name="challenge" required
+                    class="w-full rounded-sm border border-navy/15 bg-white px-4 py-3 text-navy focus:outline-none focus:ring-2 focus:ring-idea focus:border-idea transition appearance-none">
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="Volumen: contrato mucha gente y no me doy abasto">Contrato mucha gente y no me doy abasto</option>
+              <option value="Tiempo: tardo demasiado en cubrir una vacante">Tardo demasiado en cubrir una vacante</option>
+              <option value="Papeleo: expedientes, documentos y contratos">El papeleo me consume el equipo</option>
+              <option value="Certeza: quiero validar documentos y evitar fraudes">Quiero validar documentos y evitar fraudes</option>
+              <option value="Todas las anteriores">Todas las anteriores</option>
+            </select>
+            <p class="err text-bic text-xs mt-1.5 hidden">Elige tu mayor reto.</p>
+          </div>
+
+          <div>
+            <label class="flex items-start gap-3 cursor-pointer select-none">
+              <input id="consent" name="consent" type="checkbox" required value="Sí"
+                     class="mt-0.5 h-5 w-5 shrink-0 rounded-sm border border-navy/25 accent-idea focus:outline-none focus:ring-2 focus:ring-idea">
+              <span class="text-sm text-navy/70 leading-snug">Acepto la <a href="privacy.html" class="text-bic font-medium underline hover:no-underline">Política de privacidad</a> y el tratamiento de mis datos.</span>
+            </label>
+            <p class="err text-bic text-xs mt-1.5 hidden">Debes aceptar la política de privacidad para continuar.</p>
+          </div>
+
+          <button type="submit"
+                  class="w-full mt-2 inline-block bg-idea text-navy font-display font-bold text-sm rounded-full px-5 py-3.5 hover:brightness-95 transition">
+            Solicitar demostraci&oacute;n &rarr;
+          </button>
+        </div>
+      </form>
+
+      <div id="contact-success" class="hidden bg-white rounded-2xl border border-navy/10 p-9 text-center">
+        <div class="w-14 h-14 mx-auto rounded-full bg-idea text-navy font-display font-bold text-2xl flex items-center justify-center">✓</div>
+        <h3 class="font-display font-extrabold text-2xl md:text-3xl tracking-tight mt-5">¡Gracias! Te contactaremos muy pronto.</h3>
+        <p class="text-navy/60 mt-3 max-w-md mx-auto">Recibimos tus datos. Te escribimos en breve para agendar la demostraci&oacute;n.</p>
+      </div>
+    </div>
+
+    <aside class="reveal d1 lg:sticky lg:top-24">
+      <p class="eyebrow text-navy/50">Incentivos adicionales</p>
+      <h2 class="font-display font-extrabold text-2xl md:text-3xl tracking-tight mt-3">Lo que te llevas al hablar con nosotros.</h2>
+      <p class="text-navy/60 mt-4">Una sesión, tres cosas concretas y accionables para tu equipo de RR.HH.</p>
+
+      <ul class="mt-8 space-y-4">
+        <li class="flex items-start gap-4 bg-white rounded-2xl border border-navy/10 p-5">
+          <span class="w-8 h-8 shrink-0 rounded-full bg-idea text-navy font-bold flex items-center justify-center">✓</span>
+          <div>
+            <h3 class="font-display font-bold text-lg">Auditoría de tus procesos de RR.HH.</h3>
+            <p class="text-navy/55 text-sm mt-1">Detectamos cuellos de botella y oportunidades de automatización en tu flujo actual.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-4 bg-white rounded-2xl border border-navy/10 p-5">
+          <span class="w-8 h-8 shrink-0 rounded-full bg-idea text-navy font-bold flex items-center justify-center">✓</span>
+          <div>
+            <h3 class="font-display font-bold text-lg">En 15 d&iacute;as sabes si funciona</h3>
+            <p class="text-navy/55 text-sm mt-1">No pedimos un acto de fe: lo pruebas con vacantes reales antes de comprometerte.</p>
+          </div>
+        </li>
+        <li class="flex items-start gap-4 bg-white rounded-2xl border border-navy/10 p-5">
+          <span class="w-8 h-8 shrink-0 rounded-full bg-idea text-navy font-bold flex items-center justify-center">✓</span>
+          <div>
+            <h3 class="font-display font-bold text-lg">La plataforma, no una presentaci&oacute;n</h3>
+            <p class="text-navy/55 text-sm mt-1">Ves el sistema real: c&oacute;mo la IA analiza los CVs, valida los documentos y genera el contrato.</p>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+  </div>
+</section>
+
+</main>
+
+<div id="site-footer"></div>
+<script src="../assets/app.js"></script>
+
+<script>
+(function () {
+  var form = document.getElementById('contact-form');
+  var success = document.getElementById('contact-success');
+  if (!form) return;
+
+  function clearError(field) {
+    field.classList.remove('border-bic', 'ring-2', 'ring-bic/40');
+    var grp = field.closest('div');
+    var msg = grp ? grp.querySelector('.err') : null;
+    if (msg) msg.classList.add('hidden');
+  }
+
+  function showError(field) {
+    field.classList.add('border-bic', 'ring-2', 'ring-bic/40');
+    var grp = field.closest('div');
+    var msg = grp ? grp.querySelector('.err') : null;
+    if (msg) msg.classList.remove('hidden');
+  }
+
+  function isValidEmail(v) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  // limpia el error de un campo en cuanto el usuario lo corrige
+  ['name', 'company', 'email', 'phone', 'challenge', 'consent'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var ev = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(ev, function () { clearError(el); });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var ok = true;
+    var name = document.getElementById('name');
+    var company = document.getElementById('company');
+    var email = document.getElementById('email');
+    var phone = document.getElementById('phone');
+    var challenge = document.getElementById('challenge');
+    var consent = document.getElementById('consent');
+
+    [name, company, email, phone, challenge].forEach(function (f) {
+      if (!f.value.trim()) { showError(f); ok = false; }
+    });
+    if (email.value.trim() && !isValidEmail(email.value.trim())) { showError(email); ok = false; }
+    if (!consent.checked) { showError(consent); ok = false; }
+
+    if (!ok) {
+      var first = form.querySelector('.border-bic, input.border-bic') || form.querySelector('[aria-invalid]');
+      if (first && first.scrollIntoView) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // DEMO: no se envía a Web3Forms. Muestra el estado de gracias inline.
+    // En producción, elimina este preventDefault/return y deja que el form haga POST.
+    form.classList.add('hidden');
+    if (success) {
+      success.classList.remove('hidden');
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

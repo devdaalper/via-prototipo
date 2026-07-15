@@ -1,0 +1,4 @@
+# Versión de revisión del sitio v.ia — no indexar.
+# Existe solo para que la clienta la comente. El sitio real vivirá en su propio dominio.
+User-agent: *
+Disallow: /
