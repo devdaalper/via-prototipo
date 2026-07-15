@@ -113,3 +113,6 @@ details[open] .faq-chevron{transform:rotate(180deg)}
 .fb-panel .lk{color:rgba(235,236,224,.6);font-size:11px;cursor:pointer;text-decoration:underline;margin-right:12px}
 .fb-foot{padding:12px;border-top:1px solid rgba(235,236,224,.12);display:flex;gap:8px;flex-wrap:wrap}
 .fb-empty{color:rgba(235,236,224,.55);font-size:13px;padding:20px;text-align:center;line-height:1.55}
+
+.fb-send.fb-ok{background:#2f6b1f;color:#eaf7d8}
+.fb-fail{margin:10px 12px;padding:10px 12px;border-radius:10px;background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.4);color:#ffdede;font-size:12.5px;line-height:1.5}

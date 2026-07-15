@@ -1,9 +1,9 @@
 (function () {
   var KEY = 'via_fb_v1';
   var HINTKEY = 'via_fb_hint';
-  var PAGECODE = { index:'HOME',
-    security:'SEG', careers:'EMPLEO', manifiesto:'NOSOTROS', contact:'CONTACTO',
+  var PAGECODE = { home:'HOME', index:'HOME', security:'SEG', contact:'CONTACTO',
     privacy:'PRIV', terms:'TERMS' };
+  var SENTKEY = 'via_fb_sent_v1';
 
   var comments = {};
   try { comments = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { comments = {}; }
@@ -16,6 +16,9 @@
   function icoSend() { return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>'; }
 
   function activeRoot() { return document.querySelector('.page.active') || document; }
+  // El idioma entra en el ID: sin esto, pt/index.html y index.html generaban los
+  // MISMOS códigos (HOME-01…) y comentar en portugués borraba el de español.
+  function langPrefix() { return (document.body.getAttribute('data-lang') === 'pt') ? 'PT-' : ''; }
   function pageId() { var p = document.querySelector('.page.active'); return p ? p.getAttribute('data-page') : (document.body.getAttribute('data-page') || 'index'); }
   function nameOf(sec) {
     var c = sec.querySelector('.eyebrow') || sec.querySelector('h1,h2,h3') || sec.querySelector('p');
@@ -32,6 +35,8 @@
     if (!L.length) return 'Sin comentarios.';
     return 'Feedback v.ia\n\n' + L.map(function (c) { return '[' + c.code + ' · ' + c.name + ']\n' + c.text; }).join('\n\n');
   }
+
+  // ---------- UI ----------
   var sendBtn = document.createElement('button');
   sendBtn.className = 'fb-send';
   document.body.appendChild(sendBtn);
@@ -61,8 +66,10 @@
   function hideHint() { hint.classList.add('hide'); try { localStorage.setItem(HINTKEY, '1'); } catch (e) {} }
   hint.querySelector('.x').addEventListener('click', hideHint);
   if (localStorage.getItem(HINTKEY) === '1' || listComments().length) hint.classList.add('hide');
+
+  // ---------- etiquetado de secciones ----------
   function tag() {
-    var root = activeRoot(), pid = pageId(), code = PAGECODE[pid] || pid.toUpperCase();
+    var root = activeRoot(), pid = pageId(), code = langPrefix() + (PAGECODE[pid] || pid.toUpperCase());
     var secs = root.querySelectorAll('main > section'), i = 0;
     secs.forEach(function (sec) {
       i++;
@@ -83,6 +90,8 @@
     });
     syncSend();
   }
+
+  // ---------- popover de comentario ----------
   function openPop(id, name, pid) {
     current = { id: id, name: name, page: pid };
     pop.querySelector('h4').textContent = name;
@@ -101,11 +110,13 @@
     var v = pop.querySelector('textarea').value.trim();
     if (v) comments[current.id] = { code: current.id, name: current.name, page: current.page, text: v, ts: Date.now() };
     else delete comments[current.id];
-    persist(); tag(); renderPanel(); hideHint(); closePop();
+    persist(); tag(); renderPanel(); hideHint(); closePop(); scheduleAuto();
   });
   pop.querySelector('.del').addEventListener('click', function () {
     if (!current) return; delete comments[current.id]; persist(); tag(); renderPanel(); closePop();
   });
+
+  // ---------- panel de resumen / envío ----------
   function renderPanel() {
     var L = listComments();
     var items = L.length
@@ -127,6 +138,50 @@
       + '<button class="fb-a del" data-act="clear">Borrar todo</button></div>';
   }
 
+  // ── ENVÍO ──────────────────────────────────────────────────────────────────
+  // Reglas: (1) verificar SIEMPRE la respuesta — un HTTP 200 con success:false
+  // significa que NO llegó; (2) no depender de que pulse el botón: auto-envío
+  var autoTimer = null, sending = false;
+  function lastSent() { try { return localStorage.getItem(SENTKEY) || ''; } catch (e) { return ''; } }
+  function markSent(sig) { try { localStorage.setItem(SENTKEY, sig); } catch (e) {} }
+  function signature() { return asText(); }
+  function isDirty() { return listComments().length > 0 && signature() !== lastSent(); }
+
+  function send(origen, keepalive) {
+    if (sending || !listComments().length) return Promise.resolve(false);
+    var sig = signature();
+    sending = true;
+    return fetch('https://formsubmit.co/ajax/bccbf98d51c6cca29509f3c0e2f4bded', {
+      method: 'POST',
+      keepalive: !!keepalive,
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'Feedback v.ia — ' + listComments().length + ' comentario(s) [' + origen + ']',
+        _template: 'table',
+        message: sig
+      })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        sending = false;
+        // ⚠ Formsubmit responde HTTP 200 aunque falle. Hay que mirar 'success'.
+        var ok = j && String(j.success) === 'true';
+        if (ok) { markSent(sig); }
+        syncSend();
+        return ok;
+      })
+      .catch(function () { sending = false; syncSend(); return false; });
+  }
+  function scheduleAuto() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(function () { if (isDirty()) send('automático'); }, 4000);
+  }
+  // Red de seguridad: si cierra o cambia de pestaña con comentarios sin enviar.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && isDirty()) send('al salir', true);
+  });
+  window.addEventListener('pagehide', function () { if (isDirty()) send('al salir', true); });
+
   panel.addEventListener('click', function (e) {
     var t = e.target;
     if (t.hasAttribute('data-close')) { panel.classList.remove('open'); return; }
@@ -137,13 +192,22 @@
     if (act === 'send') {
       if (!listComments().length) { alert('Aún no hay comentarios para enviar.'); return; }
       var sbtn = t; sbtn.disabled = true; sbtn.textContent = 'Enviando…';
-      fetch('https://formsubmit.co/ajax/bccbf98d51c6cca29509f3c0e2f4bded', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ _subject: 'Feedback v.ia — comentarios de la clienta', _template: 'table', message: asText() })
-      }).then(function (r) { return r.json(); })
-        .then(function () { sbtn.textContent = '¡Enviado! ✓ Gracias'; })
-        .catch(function () { sbtn.disabled = false; sbtn.textContent = 'Reintentar envío'; });
+      send('manual').then(function (ok) {
+        if (ok) { sbtn.textContent = '¡Enviado! ✓ Gracias'; renderPanel(); }
+        else {
+          // NO mentimos: si no llegó, se le dice y se le da otra salida.
+          sbtn.disabled = false; sbtn.textContent = 'No se pudo enviar — reintentar';
+          var w = panel.querySelector('.fb-fail');
+          if (!w) {
+            w = document.createElement('div'); w.className = 'fb-fail';
+            w.innerHTML = 'No pudimos enviarlo desde aquí (puede ser tu conexión). '
+              + 'Tus comentarios <b>siguen guardados</b>. Mándanoslos por '
+              + '<span class="lk" data-act="wa" style="color:#A6E115">WhatsApp</span> o '
+              + '<span class="lk" data-act="copy" style="color:#A6E115">cópialos</span> y pégalos en un mensaje.';
+            panel.querySelector('.fb-foot').before(w);
+          }
+        }
+      });
       return;
     }
     if (act === 'copy') {
@@ -166,10 +230,14 @@
   }
 
   function syncSend() {
-    var n = listComments().length;
-    sendBtn.innerHTML = icoSend() + '<span>Enviar feedback</span>' + (n ? '<span class="cnt">' + n + '</span>' : '');
+    var n = listComments().length, dirty = isDirty();
+    sendBtn.innerHTML = icoSend() + '<span>' + (n && !dirty ? 'Comentarios enviados' : 'Enviar feedback') + '</span>'
+      + (n ? '<span class="cnt">' + n + '</span>' : '');
+    sendBtn.classList.toggle('fb-ok', !!n && !dirty);
   }
   sendBtn.addEventListener('click', function () { renderPanel(); panel.classList.toggle('open'); });
+
+  // ---------- arranque: siempre activo ----------
   tag();
   window.viaFeedbackRetag = tag;
 })();
